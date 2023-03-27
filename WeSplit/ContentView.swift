@@ -24,14 +24,25 @@ struct ContentView: View {
         let amountPerPerson = grandTotal / peopleCount
         
         return amountPerPerson
+        
     }
+    
+    var checkTotal: Double {
+        let tipSelect = Double(tipPercentage)
+        let tip = checkAmount / 100 * tipSelect
+        let total = checkAmount + tip
+        
+        return total
+    }
+ 
+   
     
     var body: some View {
         VStack {
             NavigationView {
                 Form {
                     Section {
-                        TextField("Amount", value: $checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                        TextField("Check Amount", value: $checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                             .keyboardType(.decimalPad)
                             .focused($amountIsFocused)
                         
@@ -40,21 +51,31 @@ struct ContentView: View {
                                 Text("\($0) people")
                             }
                         }
+                    } header: {
+                        Text("What is your check amount?")
                     }
                     
                     Section {
                         Picker("Tip Percentage", selection: $tipPercentage) {
-                            ForEach(tipPercentages, id: \.self) {
+                            ForEach(0..<101) {
                                 Text($0, format: .percent)
                             }
                         }
-                        .pickerStyle(.segmented)
+                        .pickerStyle(.wheel)
                     } header: {
                         Text("How much tip do you want to leave?")
                     }
                     
                     Section {
                         Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                    } header: {
+                        Text("Amount per person")
+                    }
+                    
+                    Section {
+                        Text(checkTotal, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                    } header: {
+                        Text("Check Total (check + tip)")
                     }
                 }
                 .navigationTitle("WeSplit")
