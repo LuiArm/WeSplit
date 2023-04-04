@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var numberOfPeople = 2
     @State private var tipPercentage = 20
     @FocusState private var amountIsFocused: Bool
+    @State private var redText = false 
     
     let tipPercentages = [0,10,15,20,25]
     
@@ -62,6 +63,7 @@ struct ContentView: View {
                             }
                         }
                         .pickerStyle(.wheel)
+                     
                     } header: {
                         Text("How much tip do you want to leave?")
                     }
@@ -74,6 +76,7 @@ struct ContentView: View {
                     
                     Section {
                         Text(checkTotal, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                            .background(tipPercentage == 0 ? .red : .blue)
                     } header: {
                         Text("Check Total (check + tip)")
                     }
